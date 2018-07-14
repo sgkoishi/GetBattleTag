@@ -12,3 +12,6 @@ I'm not familiar with HDT API, so I would appreciate any suggestions. :)
 
 ## Credits
 Plugin inspired by [Kno010](https://www.reddit.com/user/Kno010)'s work described in this [topic](https://www.reddit.com/r/hearthstone/comments/8yf6ei/easy_way_to_chat_with_your_opponent_during_a_match/).
+
+## License
+MIT

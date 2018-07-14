@@ -1,6 +1,6 @@
 ﻿# Get BattleTag
 
- [![GitHub release](https://img.shields.io/github/release/andburn/hdt-plugin-example.svg?maxAge=604800)](https://github.com/andburn/hdt-plugin-example/releases/latest)
+ [![GitHub release](https://img.shields.io/github/release/KimTranjan/GetBattleTag.svg?maxAge=604800)](https://github.com/KimTranjan/GetBattleTag/releases)
 
 Get BattleTag is a plugin for [Hearthstone Deck Tracker](https://github.com/HearthSim/Hearthstone-Deck-Tracker) that allows you to get your current opponent BattleTag.
 

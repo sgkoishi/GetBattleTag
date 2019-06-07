@@ -1,68 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
+﻿using Hearthstone_Deck_Tracker.API;
+using Hearthstone_Deck_Tracker.Plugins;
+using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using Hearthstone_Deck_Tracker.API;
-using Hearthstone_Deck_Tracker.Plugins;
 
-namespace GetBattleTag {
-    public class GetBattleTag : IPlugin {
-        private const string HearthstoneLogsPath = @"C:\Program Files (x86)\Hearthstone\Logs\Power.log";
-
-        public void OnLoad() { }
-        public void OnUnload() { }
-        public void OnUpdate() { }
-
-        public void OnButtonPress() {
-            CopyOpponentBattleTag();
-        }
-
+namespace GetBattleTag
+{
+    public class GetBattleTag : IPlugin
+    {
+        private static string _LastPlayerBattleTag;
         public string Name => "Get BattleTag";
-        public string Description => "Get BattleTag of your current/last opponent.";
-        public string ButtonText => "Get BattleTag";
-        public string Author => "KimTranjan & Kno010";
-        public Version Version => new Version(1, 0, 0);
 
-        public MenuItem MenuItem {
-            get {
-                var menu = new MenuItem {
+        public string Description => "Get BattleTag of your opponent.";
+
+        public string ButtonText => "Get BattleTag";
+
+        public string Author => "SGKoishi";
+
+        public Version Version => Assembly.GetExecutingAssembly().GetName().Version;
+
+        public MenuItem MenuItem
+        {
+            get
+            {
+                var menu = new MenuItem
+                {
                     Header = "Get BattleTag"
                 };
-
-                menu.Click += (sender, e) => { CopyOpponentBattleTag(); };
-
+                menu.Click += (s, e) => this.OnButtonPress();
                 return menu;
             }
         }
 
-        private static void CopyOpponentBattleTag() {
-            if (string.IsNullOrEmpty(Core.Game.Player.Name)) {
-                MessageBox.Show("You must play at least one game to get your last opponent's BattleTag.");
-
-                return;
-            }
-
-            Clipboard.SetText(GetLastOpponentBattleTag());
+        public void OnButtonPress()
+        {
+            Clipboard.SetText(_LastPlayerBattleTag);
         }
 
-        private static string GetLastOpponentBattleTag() {
-            var opponents = new List<string>();
+        public void OnLoad()
+        {
+        }
 
-            using (var fs = File.Open(HearthstoneLogsPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            using (var bs = new BufferedStream(fs))
-            using (var sr = new StreamReader(bs)) {
-                string line;
+        public void OnUnload()
+        {
+        }
 
-                while ((line = sr.ReadLine()) != null) {
-                    if (line.Contains("GameState.DebugPrintGame() - PlayerID=") && !line.Contains(Core.Game.Player.Name)) {
-                        opponents.Add(line);
-                    }
-                }
+        public void OnUpdate()
+        {
+            if (!string.IsNullOrWhiteSpace(Core.Game.Opponent.Name))
+            {
+                _LastPlayerBattleTag = Core.Game.Opponent.Name;
             }
-
-            return Regex.Match(opponents[opponents.Count - 1], "(?<=PlayerName=).*").Value;
         }
     }
 }
